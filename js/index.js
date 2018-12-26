@@ -2,14 +2,18 @@ var app = new Vue({
   el: '#app',
   data: {
     newTodo: '',
-    todos: [{
-      id:123,
-      title: '妳好',
-      completed: false
-    }],
+    todos: [],
     cacheTodo: {},
     cacheTitle: '',
     visibility: 'all'
+  },
+  mounted() {
+    var storageTodoItems = localStorage.getItem("todoItems");
+    if(storageTodoItems){
+      console.log(JSON.parse(storageTodoItems));
+      
+      this.todos = JSON.parse(storageTodoItems);
+    }
   },
   methods: {
     addTodo: function(){
@@ -53,6 +57,9 @@ var app = new Vue({
     },
     unCompleted: function(){
       return this.todos.filter(item => item.completed == false).length;
-    }
-  }
+    },
+  },
+  updated() {
+    localStorage.setItem("todoItems", JSON.stringify(this.todos));
+  },
 });
